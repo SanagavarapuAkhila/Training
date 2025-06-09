@@ -1,0 +1,93 @@
+--------------------------Operators--------------------------------
+
+>> ARALIBSC :
+Arthematic:(*,+,-,/,%)
+Relational: (<,>,=,<=)
+Assignment:(=,+=,==,-=,*=,/=)
+Logical: (&&,!!,^)
+Increment,decrement:(++,--(pre,post Inc,dec))
+Bitwise: (&,||,<<,>>)
+Special: ([],{},;,"",(),'')
+Conditional Operator:(it can also called as terenary operator)?,:
+
+-----------------------class & Objects-----------------------------
+
+>>Object-It has properties and behaviour
+>>class contains collection of objects
+>>all keywords are must be in lowercase(ex-class,int,float)
+>> identifiers are for a classname,method name,variable name(userdefined)
+
+
+--------------------------------Basic Example------------------------
+if the path is not avaliable we have to set the path in (properties-env var-set the path(opening jdk))
+
+class demo{
+public static void main(string args[]){
+System.out.println("Welcome to java Programming");
+}
+}
+
+public class A{
+public static void main(String args[]){
+System.out.println("hi Akhila");
+}
+}
+----------------------------------Packages------------------------------
+>>javap java.lang.String: we can see all the packages.
+>>javap java.lang.String>String.txt: to see to string data in file format
+>>src-extract-there we can find any packages.
+System.out.println: System comes under java.lang
+out comes under reference and it is found in i.o
+Println comes under java.lang.String
+
+---------------------Eclipse--------------------------------
+>>workspace is nothing but directory or path 
+>>open perspective--java--open
+>>main--ctrl-space bar(it is the shortcut for main stmt)
+>>ctrl+f11,Func+f11 (directly it will run)
+
+--------------------variables---------------------------
+>>In java there are 3 types of variables.
+   * instance variable:
+     >> A variable which is used by creating object.(under the class)
+     ex: Dog d = new Dog();
+     >> Dog- classname
+     >> d-refrence or identifer
+     >> new - it is a keyword to create heap memory
+     >> temp memory: stack
+     >> perm memory: Heap
+
+   * static variable or Class level Variable:
+     >> A variable which is accessed without creating object and also using object.
+     >> To execute the static one we have to use teh statement (System.exit(Any number)); 
+   
+   * Local Variable:
+     >> Inside the method we can access the variable(passing the value to the argument)
+
+
+----------------------Access Specifiers---------------------------
+1.public
+2.private
+3.default
+4.protected
+     
+               within a package              within a subpackage       outside a package           within a class
+
+public              y                               y                       y                           y
+
+Private             N                               N                       N                           y
+               
+default             y                               N                       N                           y
+
+protected           y                               y(extends)              y(extends)                  y
+
+
+--------------------JAR Project--------------------------------
+>>project---export---java---runnable jar file----select source(project name)------select destination(path ex:desktop)-----finish
+>>if version is supported it will generate o/p or else we have to change the version ----build path----configure build path-----JRE----select supported version
+>> to check the version in cmd  (java -version)
+>>In cmd we have to execute like java -jar (Project name).jar
+
+
+-------------apache installation------------------------------
+apache.9.0 64 bit download zip----extract----check whether the bin is there or not
