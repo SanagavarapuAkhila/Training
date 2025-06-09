@@ -1,0 +1,309 @@
+Spring:
+-------------------
+It's a lightweight framework.
+It's was developed by Rod Johnson in 2003.
+IOC(Inversion of control)(using new keyword,requesting the object)
+---------------------------
+there are two phases(both are interfaces):
+1.Bean Factory(access by application context,it supports core java only)
+2.Applicatio Context(it supports java and advanced java).
+----------------------------
+Dependency Injection
+what evere the data we gave it will et the value and get the value.
+ASP(aspect oriented program)
+------------------
+Creating the project using springboot:
+------------------
+right click---build path---conigure build path-----add libraries----use libraries-----new----SpringHibernate-----their we have to add externallibraries----apply and close
+
+
+-------------------------
+ u1----container--using object(only one time)-----beans.xml
+ u2----container          "
+ u3----container          "
+
+-----------------------
+SpringProject
+---------------
+Sample program:
+--------------------
+main.java:
+---------------
+package com.example;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.core.io.ClassPathResource;
+public class Main {
+public static void main(String[] args) {
+	
+     BeanFactory ctx=new XmlBeanFactory(new ClassPathResource("beans.xml"));
+     Animal a=(Animal)ctx.getBean("a");
+
+     System.out.println("Animal has "+a.getLegs()+" legs");
+     a.eat();
+
+
+}
+}
+
+Animal.java:
+-----------------------
+package com.example;
+
+public class Animal {
+	private int legs;
+
+	public int getLegs() {
+		return legs;
+	}
+
+	public void setLegs(int legs) {
+		this.legs = legs;
+	}
+public void eat()
+{
+	System.out.println("Eats Veg and Non Veg");
+}
+}
+
+
+beans.xml:
+----------------
+<?xml version = "1.0" encoding = "UTF-8"?>
+<beans xmlns = "http://www.springframework.org/schema/beans"
+ xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation = "http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+ <bean id="a" class="com.example.Animal">
+ <property name="legs" value="4"></property>
+ </bean>
+</beans>
+
+-------------------
+In container there are 5 scopes:
+1.Singleton
+2.prototype
+3.session
+4.request
+5.global session
+---------------------------
+SpringAnnotation:
+--------------------
+Sample Program:
+Main.java:
+------------------
+package com.example;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+public class Main {
+	public static void main(String args[]) {
+		ApplicationContext ctx=new AnnotationConfigApplicationContext(HelloWorldConfig.class);
+		HelloWorld h=ctx.getBean(HelloWorld.class);
+		h.setMsg("Welcome to Spring");
+		System.out.println(h.getMsg());
+	}
+
+}
+
+HelloWorld.java:
+-----------------------
+package com.example;
+
+public class HelloWorld {
+	private String msg;
+	
+public String getMsg() {
+	return msg;
+}
+public void setMsg(String msg) {
+	this.msg=msg;
+}
+
+}
+
+HelloworldConfig.java:
+------------------------
+package com.example;
+import org.springframework.context.annotation.Bean;
+public class HelloWorldConfig {
+	@Bean
+	public HelloWorld meth1()
+	{
+		return new HelloWorld();
+	}
+
+}
+
+SpringConstructor:
+---------------------
+Cat.java:
+--------------
+package com.example;
+public class Cat {
+private int legs;
+private String name;
+public Cat(int legs) {
+this.legs = legs;
+
+}
+
+public Cat(String name) {
+this.name = name;
+}
+
+public Cat(int legs, String name) {
+this.legs = legs;
+this.name = name;
+}
+
+public int getLegs() {
+return legs;
+}
+
+public String getName() {
+return name;
+}
+}
+
+beans.xml:
+-------------------
+<?xml version = "1.0" encoding = "UTF-8"?>
+<beans xmlns = "http://www.springframework.org/schema/beans"
+ xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation = "http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+ <bean id="c1" class="com.example.Cat">
+ <constructor-arg name="legs" value="4"></constructor-arg>
+ </bean>
+ <bean id="c2" class="com.example.Cat">
+ <constructor-arg name="name" value="Tom"></constructor-arg>
+ </bean>
+ <bean id="c3" class="com.example.Cat">
+ <constructor-arg name="legs" value="4"></constructor-arg>
+ <constructor-arg name="name" value="Kitty"></constructor-arg>
+ </bean>
+</beans>
+
+Main.java:
+-----------------
+package com.example;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+public class Main {
+public static void main(String[] args) {
+ApplicationContext ctx=new ClassPathXmlApplicationContext("beans.xml");
+Cat c1=(Cat)ctx.getBean("c1");
+System.out.println("Cat has "+c1.getLegs()+" legs");
+Cat c2=(Cat)ctx.getBean("c2");
+System.out.println("Cat name is "+c2.getName());
+Cat c3=(Cat)ctx.getBean("c3");
+System.out.println(" legs "+c3.getLegs()+" name "+c3.getName());
+
+}
+}
+
+CatConfig.java:
+----------------------
+package com.example;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+public class Main {
+public static void main(String[] args) {
+ApplicationContext ctx=new ClassPathXmlApplicationContext("beans.xml");
+Cat c1=(Cat)ctx.getBean("c1");
+System.out.println("Cat has "+c1.getLegs()+" legs");
+Cat c2=(Cat)ctx.getBean("c2");
+System.out.println("Cat name is "+c2.getName());
+Cat c3=(Cat)ctx.getBean("c3");
+System.out.println(" legs "+c3.getLegs()+" name "+c3.getName());
+
+}
+}
+
+Main2.java:
+-----------------
+package com.example;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+public class Main2 {
+public static void main(String[] args) {
+ApplicationContext ctx=new AnnotationConfigApplicationContext(CatConfig.class);
+Cat c1=(Cat)ctx.getBean("c1");
+System.out.println("Cat has "+c1.getLegs()+" legs");
+Cat c2=(Cat)ctx.getBean("c2");
+System.out.println("Cat name is "+c2.getName());
+Cat c3=(Cat)ctx.getBean("c3");
+System.out.println("Legs "+c3.getLegs()+" Name "+c3.getName());
+}
+}
+
+
+
+Using Inheritence:
+-----------------------
+Animal.java:
+---------------
+package com.example;
+public class Animal {
+private String eat;
+public String getEat() {
+return eat;
+}
+public void setEat(String eat) {
+this.eat = eat;
+}
+}
+
+Tiger.java:
+--------------------
+package com.example;
+public class Tiger extends Animal{
+private String eat;
+private String run;
+public String getEat() {
+return eat;
+}
+public void setEat(String eat) {
+this.eat = eat;
+}
+public String getRun() {
+return run;
+}
+public void setRun(String run) {
+this.run = run;
+}
+}
+
+Main3.java:
+----------------
+package com.example;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+public class Main3 {
+public static void main(String[] args) {
+ApplicationContext ctx=new ClassPathXmlApplicationContext("beans2.xml");
+Tiger t=(Tiger)ctx.getBean("t");
+System.out.println(t.getEat());
+System.out.println(t.getRun());
+}
+}
+
+Beans2.xml:
+------------------
+<?xml version = "1.0" encoding = "UTF-8"?>
+<beans xmlns = "http://www.springframework.org/schema/beans"
+ xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation = "http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+ <bean id="a" class="com.example.Animal">
+ <property name="eat" value="Eats Veg and Non Veg"></property>
+ </bean>
+ <bean id="t" class="com.example.Tiger" parent="a">
+ <property name="eat" value="Eats Only Non Veg"></property>
+ <property name="run" value="#{a.eat}"></property>
+ </bean>
+</beans>
+
+
