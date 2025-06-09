@@ -1,0 +1,442 @@
+Session:
+------------------
+Session is nothing but user interaction. It is a period of time how user can intreact.
+
+Conflict:
+----------------------
+the obj info should be shared in particular obj not any other objs.
+
+Context:
+-------------------
+Memory area inside a container.
+
+-------------------------------JSPSERVLET Programs with the help of xml file---------------------------------
+Path: Dynamic Project----create project----webapp----create web.xml file-------double click on web.xml file-----source------automatically generate path
+
+ServletDemo.java:
+-----------------
+package com.example;
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
+public class ServletDemo extends HttpServlet{
+@Override
+public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+res.setContentType("text/html");
+PrintWriter pw=res.getWriter();
+pw.println("<html><body bgcolor='pink'>Welcome to First Servlet</body></html>");
+}
+}
+
+web.xml:
+---------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <servlet>
+  <servlet-name>First</servlet-name>
+  <servlet-class>com.example.ServletDemo</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  <servlet-name>First</servlet-name>
+  <url-pattern>/abc</url-pattern>
+  </servlet-mapping>
+</web-app>
+
+-------------------------------------Connecting with JSP--------------------------------
+
+Web.xml:
+-------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <servlet>
+  <servlet-name>First</servlet-name>
+  <servlet-class>com.example.ServletDemo</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  <servlet-name>First</servlet-name>
+  <url-pattern>/abc</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  <servlet-name>MyJSP</servlet-name>
+  <jsp-file>/First.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+  <servlet-name>MyJSP</servlet-name>
+  <url-pattern>/xxx</url-pattern>
+  </servlet-mapping>
+</web-app>
+
+First.jsp:
+-----------------------
+<html>
+<body bgcolor="cyan">
+<p>Welcome to JSP</p>
+</body>
+</html>
+
+--------------------------ServletConflict---------------------------------------
+ServletDemo.java
+------------------------------
+package com.example;
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
+public class ServletDemo extends HttpServlet{
+@Override
+public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+res.setContentType("text/html");
+ServletConfig sconfig=getServletConfig();
+String uname=sconfig.getInitParameter("username");
+String pass=sconfig.getInitParameter("password");
+PrintWriter pw=res.getWriter();
+pw.println("<html><body bgcolor='pink'>");
+pw.println("<p>Username is "+uname+" and password is "+pass+"</p>");
+pw.println("</body></html>");
+}
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SecondServlet.java
+--------------------------------
+package com.example;
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
+public class SecondServlet extends HttpServlet{
+@Override
+public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+res.setContentType("text/html");
+ServletConfig sconfig=getServletConfig();
+String uname=sconfig.getInitParameter("username");
+String pass=sconfig.getInitParameter("password");
+PrintWriter pw=res.getWriter();
+pw.println("<html><body bgcolor='green'>");
+pw.println("<p>Username is "+uname+" and password is "+pass+"</p>");
+pw.println("</body></html>");
+}
+}
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+web.xml
+--------------
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+ <servlet>
+ <servlet-name>First</servlet-name>
+ <servlet-class>com.example.ServletDemo</servlet-class>
+ <init-param>
+ <param-name>username</param-name>
+ <param-value>Admin</param-value>
+ </init-param>
+ <init-param>
+ <param-name>password</param-name>
+ <param-value>mphasis</param-value>
+ </init-param>
+ </servlet>
+ <servlet-mapping>
+ <servlet-name>First</servlet-name>
+ <url-pattern>/abc</url-pattern>
+ </servlet-mapping>
+ <servlet>
+ <servlet-name>Sec</servlet-name>
+ <servlet-class>com.example.SecondServlet</servlet-class>
+ </servlet>
+ <servlet-mapping>
+ <servlet-name>Sec</servlet-name>
+ <url-pattern>/sec</url-pattern>
+ </servlet-mapping>
+ <servlet>
+ <servlet-name>MyJSP</servlet-name>
+ <jsp-file>/First.jsp</jsp-file>
+ </servlet>
+ <servlet-mapping>
+ <servlet-name>MyJSP</servlet-name>
+ <url-pattern>/xxx</url-pattern>
+ </servlet-mapping>
+</web-app>
+
+-----------------------------ServletContext------------------------------
+web.xml:
+------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+ <servlet>
+ <servlet-name>First</servlet-name>
+ <servlet-class>com.example.ServletDemo</servlet-class>
+ <init-param>
+ <param-name>username</param-name>
+ <param-value>Admin</param-value>
+ </init-param>
+ <init-param>
+ <param-name>password</param-name>
+ <param-value>mphasis</param-value>
+ </init-param>
+ </servlet>
+ <servlet-mapping>
+ <servlet-name>First</servlet-name>
+ <url-pattern>/abc</url-pattern>
+ </servlet-mapping>
+ <servlet>
+ <servlet-name>Sec</servlet-name>
+ <servlet-class>com.example.SecondServlet</servlet-class>
+ </servlet>
+ <servlet-mapping>
+ <servlet-name>Sec</servlet-name>
+ <url-pattern>/sec</url-pattern>
+ </servlet-mapping>
+ <servlet>
+ <servlet-name>MyJSP</servlet-name>
+ <jsp-file>/First.jsp</jsp-file>
+ <init-param>
+ <param-name>empname</param-name>
+ <param-value>Akhila</param-value>
+ </init-param>
+  </servlet>
+ <servlet-mapping>
+ <servlet-name>MyJSP</servlet-name>
+ <url-pattern>/xxx</url-pattern>
+ </servlet-mapping>
+</web-app>
+
+First.jsp:
+-----------------------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+
+<html>
+<body bgcolor="cyan">
+<p>Welcome to my First JSP Program</p>
+<%=config.getInitParameter("empname") %>
+</body>
+</html>
+
+-----------------------------------JSPContext-------------------------------------------
+web.xml:
+---------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+ <servlet>
+ <servlet-name>First</servlet-name>
+ <servlet-class>com.example.ServletDemo</servlet-class>
+ <init-param>
+ <param-name>username</param-name>
+ <param-value>Admin</param-value>
+ </init-param>
+ <init-param>
+ <param-name>password</param-name>
+ <param-value>mphasis</param-value>
+ </init-param>
+ </servlet>
+ <servlet-mapping>
+ <servlet-name>First</servlet-name>
+ <url-pattern>/abc</url-pattern>
+ </servlet-mapping>
+ <servlet>
+ <servlet-name>Sec</servlet-name>
+ <servlet-class>com.example.SecondServlet</servlet-class>
+ </servlet>
+ <servlet-mapping>
+ <servlet-name>Sec</servlet-name>
+ <url-pattern>/sec</url-pattern>
+ </servlet-mapping>
+ <servlet>
+ <servlet-name>MyJSP</servlet-name>
+ <jsp-file>/First.jsp</jsp-file>
+ <init-param>
+ <param-name>empname</param-name>
+ <param-value>Akhila</param-value>
+ </init-param>
+  </servlet>
+ <servlet-mapping>
+ <servlet-name>MyJSP</servlet-name>
+ <url-pattern>/xxx</url-pattern>
+ </servlet-mapping>
+ <context-param>
+ <param-name>data</param-name>
+ <param-value>Developers</param-value>
+ </context-param>
+</web-app>
+
+ServletDemo:
+-----------------------
+package com.example;
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
+public class ServletDemo extends HttpServlet{
+@Override
+public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+res.setContentType("text/html");
+ServletConfig sconfig=getServletConfig();
+ServletContext scontext=getServletContext();
+String uname=sconfig.getInitParameter("username");
+String pass=sconfig.getInitParameter("password");
+PrintWriter pw=res.getWriter();
+pw.println("<html><body bgcolor='pink'>");
+pw.println("<p>Username is "+uname+" and password is "+pass+"</p>");
+pw.println("Data is "+scontext.getInitParameter("data"));
+pw.println("</body></html>");
+}
+}
+
+Fist.jsp:
+---------------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+
+<html>
+<body bgcolor="cyan">
+<p>Welcome to my First JSP Program</p>
+<%=config.getInitParameter("empname") %>
+<%=application.getInitParameter("data") %>
+</body>
+</html>
+
+
+---------------------------------Session---------------------------
+index.html:
+----------------------
+<html>
+<body bgcolor="yellow">
+<form action="Two.jsp">
+Enter your name : <input type="text" name="user"/><br/>
+<button type="submit">Click me</button>
+</form>
+</body>
+</html>
+
+Two.jsp:
+-------------------
+<html>
+<body bgcolor="green">
+<%String user=request.getParameter("user");
+out.println("Hai "+user);
+session.setAttribute("aaa", user);
+%>
+<a href="Third.jsp">Click me</a>
+</body>
+</html>
+
+Three.jsp:
+-----------------
+<html>
+<body bgcolor="blue">
+Hai <%=session.getAttribute("aaa") %>
+<%session.invalidate(); %>
+<br/>
+<a href="Fourth.jsp">Click me</a>
+</body>
+</html>
+
+Fourth.jsp:
+-----------------
+<html>
+<body bgcolor="cyan">
+Hai <%=session.getAttribute("aaa") %>
+<a href="./abc">Click me</a>
+<br/>
+</body>
+</html>
+
+ServletDemo.java:
+---------------------
+package com.example;
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
+public class ServletDemo extends HttpServlet{
+@Override
+public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+res.setContentType("text/html");
+HttpSession session=req.getSession();
+PrintWriter pw=res.getWriter();
+pw.println("<html><body bgcolor='pink'>");
+pw.println("Hai "+session.getAttribute("aaa"));
+pw.println("<a href='./sec'>Click me</a>");
+pw.println("</body></html>");
+}
+}
+
+SecondServlet.java:
+---------------------
+package com.example;
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
+public class SecondServlet extends HttpServlet{
+@Override
+public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+res.setContentType("text/html");
+HttpSession session=req.getSession();
+PrintWriter pw=res.getWriter();
+pw.println("<html><body bgcolor='green'>");
+pw.println("Hai "+session.getAttribute("aaa"));
+pw.println("</body></html>");
+}
+}
+
+web.xml
+-----------------
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+ <servlet>
+ <servlet-name>First</servlet-name>
+ <servlet-class>com.example.ServletDemo</servlet-class>
+ <init-param>
+ <param-name>username</param-name>
+ <param-value>Admin</param-value>
+ </init-param>
+ <init-param>
+ <param-name>password</param-name>
+ <param-value>mphasis</param-value>
+ </init-param>
+ </servlet>
+ <servlet-mapping>
+ <servlet-name>First</servlet-name>
+ <url-pattern>/abc</url-pattern>
+ </servlet-mapping>
+ <servlet>
+ <servlet-name>Sec</servlet-name>
+ <servlet-class>com.example.SecondServlet</servlet-class>
+ </servlet>
+ <servlet-mapping>
+ <servlet-name>Sec</servlet-name>
+ <url-pattern>/sec</url-pattern>
+ </servlet-mapping>
+ <servlet>
+ <servlet-name>MyJSP</servlet-name>
+ <jsp-file>/First.jsp</jsp-file>
+ <init-param>
+ <param-name>empname</param-name>
+ <param-value>Bhuvan</param-value>
+ </init-param>
+ </servlet>
+ <servlet-mapping>
+ <servlet-name>MyJSP</servlet-name>
+ <url-pattern>/xxx</url-pattern>
+ </servlet-mapping>
+ <context-param>
+ <param-name>data</param-name>
+ <param-value>Developers</param-value>
+ </context-param>
+</web-app>
+
+
+-----------------------------GIT---------------------------------
+1.Go to GitHub create new repository
+2.Copy http URL from github
+3.Go to Eclipse ----Right click on project----Team---share project-----------create new Git Repo
+4.Go to Git Staging------add

@@ -1,0 +1,175 @@
+JSTL_Project: 
+>>download jstl-1.2.jar--------extract jstl-1.2.jar.
+2.create dynamic web project----- copy and paste the sql,jstl jar files in library in WEB-INF-------run the project
+
+SampleProgram.jsp:
+-------------------------
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+<html>
+<body bgcolor="pink">
+<c:out value="${'Welcome to JSP' }"/>
+<c:set var = "salary" scope="session" value="${2000*2 }"/>
+<c:out value="${salary}"/>
+</br>
+<c:set var="x" scope="request" value="${'Welcome to Mphasis' }"/>
+<c:out value="${x}"/>
+</body>
+</html>
+
+--------------------For sql connection------------------------
+First.jsp:
+-----------------------
+<%@ page import = "java.io.*,java.util.*,java.sql.*"%>
+<%@ page import = "javax.servlet.http.*,javax.servlet.*" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix = "c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix = "sql"%>
+<html>
+<body>
+<sql:setDataSource var = "snapshot" driver = "com.mysql.cj.jdbc.Driver"
+ url = "jdbc:mysql://localhost/mphasis"
+ user = "root" password = "Password@12"/>
+ <sql:update dataSource = "${snapshot}" var = "result">
+ INSERT INTO student VALUES (111,'Akhila','CSE');
+ </sql:update>
+ <sql:query dataSource = "${snapshot}" var = "result">
+ SELECT * from student;
+ </sql:query>
+ <table border = "1" width = "100%">
+ <tr>
+ <th>Rollno</th>
+ <th>Name</th>
+ <th>Branch</th>
+ </tr>
+ <c:forEach var = "row" items = "${result.rows}">
+ <tr>
+ <td><c:out value = "${row.rollno}"/></td>
+ <td><c:out value = "${row.name}"/></td>
+ <td><c:out value = "${row.branch}"/></td>
+ </tr>
+ </c:forEach>
+ </table>
+</body>
+</html>
+
+Filter:
+-------------
+it is used for pre-processing,post-processing.
+--------------------------------------------program on Filter----------------------------------------
+First.jsp:
+-------------------
+<%@ page import = "java.io.*,java.util.*,java.sql.*"%>
+<%@ page import = "javax.servlet.http.*,javax.servlet.*" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix = "c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix = "sql"%>
+<html>
+<body>
+<sql:setDataSource var = "snapshot" driver = "com.mysql.cj.jdbc.Driver"
+ url = "jdbc:mysql://localhost/mphasis"
+ user = "root" password = "root"/>
+ <sql:update dataSource = "${snapshot}" var = "result">
+ INSERT INTO student VALUES (111,'Bhuvan','EEE');
+ </sql:update>
+ <sql:query dataSource = "${snapshot}" var = "result">
+ SELECT * from student;
+ </sql:query>
+ <table border = "1" width = "100%">
+ <tr>
+ <th>Rollno</th>
+ <th>Name</th>
+ <th>Branch</th>
+ </tr>
+ <c:forEach var = "row" items = "${result.rows}">
+ <tr>
+ <td><c:out value = "${row.rollno}"/></td>
+ <td><c:out value = "${row.name}"/></td>
+ <td><c:out value = "${row.branch}"/></td>
+ </tr>
+ </c:forEach>
+ </table>
+</body>
+</html>
+
+MyFilter.java:
+--------------------
+<%@ page import = "java.io.*,java.util.*,java.sql.*"%>
+<%@ page import = "javax.servlet.http.*,javax.servlet.*" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix = "c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix = "sql"%>
+<html>
+<body>
+<sql:setDataSource var = "snapshot" driver = "com.mysql.cj.jdbc.Driver"
+ url = "jdbc:mysql://localhost/mphasis"
+ user = "root" password = "root"/>
+ <sql:update dataSource = "${snapshot}" var = "result">
+ INSERT INTO student VALUES (111,'Bhuvan','EEE');
+ </sql:update>
+ <sql:query dataSource = "${snapshot}" var = "result">
+ SELECT * from student;
+ </sql:query>
+ <table border = "1" width = "100%">
+ <tr>
+ <th>Rollno</th>
+ <th>Name</th>
+ <th>Branch</th>
+ </tr>
+ <c:forEach var = "row" items = "${result.rows}">
+ <tr>
+ <td><c:out value = "${row.rollno}"/></td>
+ <td><c:out value = "${row.name}"/></td>
+ <td><c:out value = "${row.branch}"/></td>
+ </tr>
+ </c:forEach>
+ </table>
+</body>
+</html>
+
+First.html:
+------------------
+<html>
+<body bgcolor="yellow">
+<form action="./abc">
+Enter username : <input type="text" name="user"/><br/>
+<button type="submit">Click me</button>
+</form>
+</body>
+</html>
+
+Web.xml:
+-----------------
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+<filter>
+<filter-name>First</filter-name>
+<filter-class>com.example.MyFilter</filter-class>
+</filter>
+<filter-mapping>
+<filter-name>First</filter-name>
+<url-pattern>/abc</url-pattern>
+</filter-mapping>
+</web-app>
+
+ServletDemo.java:
+-----------------------
+package com.example;
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+@WebServlet("/abc")
+public class ServletDemo extends HttpServlet{
+@Override
+public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+res.setContentType("text/html");
+PrintWriter pw=res.getWriter();
+pw.println("<html><body bgcolor='pink'>Welcome to Servlet Program</body></html>");
+}
+}
+
+JAAS:java authentication authorization service
+
+Listeners:
+---------------------
+these are like an interface
+
+

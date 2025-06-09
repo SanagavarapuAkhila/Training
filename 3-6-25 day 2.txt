@@ -1,0 +1,730 @@
+Network: sharing the info from one system to another system
+
+-----------------------url--------------------------------------
+Google-DNS(Domain name service)
+port-8080
+www-world wide web
+http-hyper text transfer protocol
+
+-------------------------JSP------------------------------------
+JSP-java Servere pages
+>>Directive Tag: used for functions
+Syn:
+ <%@page
+1.page
+2.taglib
+3.Include
+
+>>Scriplet Tag:
+syn:
+<%     %>
+
+>>Declaration Tag:
+Syn:
+<%!      %>
+
+
+>>Expression Tag:
+Syn:
+<%=       %>
+
+>>Action Tag:
+<jsp:useBean/>
+<jsp:setProperty/>
+<jsp:getProperty/>
+<jsp:plugin/>
+<jsp:include/>
+<jsp:forward/>
+<jsp:param/>
+
+
+------------------------Configuration for apache-------------------------
+
+>>open eclipse----open perspective--------java EE(default)--------apache(next)------------------browse(select apache 9.0 unzipped file)----------finish----
+
+>>select dynamic project-----------done with the program after that(both jsp/normal)------windows---showview-----webbrowser----select chrome,edge-------right click on run----run as server------automatically it will take to browser 
+
+>>to check the ip address we have to give the command in cmd like (ipconfig)(ex:172.21.224.72)
+
+>>if we have to access the another person program we have to change the local host as their system ip in the place of localhost.it will automatically run their code.
+
+>>JSP supports tags as well as objects
+
+<%--   --%>: for comment the lines in jsp
+
+
+--------------------------sample program on jsp--------------------------
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body bgcolor="pink">
+<marquee direction="right">Welcome to Mphasis</marquee>
+<%! int cube(int x){
+	return(x*x*x);
+	
+	
+}%>
+<p>Cube is <%=cube(5) %></p>
+
+</body>
+</html>
+
+
+------------------------date & minutes program on jsp----------------------
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+
+<%@page import="java.util.Date" %>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body bgcolor="cyan">
+<%Date d =new Date();
+out.println(d.getDate()+" / "+(d.getMonth()+1)+ " / "+(d.getYear()+1900));%>
+<br><br>
+<%out.println(d.getHours()+" : "+d.getMinutes()+" : "+d.getSeconds());
+%>
+</body>
+</html>
+
+------------------------------addition-----------------------------------
+jsp file:
+
+<!--<p>Addition is<%--=Calc.add(44,88) --%></p> -->
+<%--<%Calc c = new Calc();
+out.println("Square is "+(c.square(5)));
+--%>
+
+java file:
+
+package com.example;
+
+public class Calc {
+	public static int add(int x,int y)
+	{
+		return(x+y);
+	}
+    public int square(int x) {
+    	return(x*x);
+    }
+
+}
+
+-------------------------JSP implict objects-------------------------
+
+  Implicit Object                  	Type
+   request	                     javax.servlet.http.HttpServletRequest
+   response	                     javax.servlet.http.HttpServletResponse
+   pageContext	                     javax.servlet.jsp.PageContext
+   session	                     javax.servlet.http.HttpSession
+   application	                     javax.servlet.ServletContext
+   out	                             javax.servlet.jsp.JspWriter
+   config	                     javax.servlet.ServletConfig
+   page	                             java.lang.Object
+   exception	                     javax.servlet.jsp.JspException
+
+
+-----------------------1.request implict object---------------------------
+>>in this req implict object we use get.Parameter(it is a method)
+
+example code:
+
+index.html file:
+----------------------
+<html>
+<body bgcolor="pink">
+<form action="Welcome.jsp">
+Enter username : <input type="text" name="user"/><br/>
+Enter password : <input type="password" name="pass"/><br/>
+<button type="submit">Click me</button>
+</form>
+</body>
+</html>
+
+
+Welcome.jsp
+------------
+<html>
+<body bgcolor="blue">
+<% String usr=request.getParameter("user");
+String pss=request.getParameter("pass");
+out.println("Username is "+usr+" and password is "+pss);
+%>
+</body>
+</html>
+
+
+--------------------------easy codes url------------------------------
+
+codes share:
+
+https://codeshare.io/adwpVz
+
+justpasteit:
+
+https://justpasteit.in/
+
+
+--------------------valid user name and invalid username program on JSP-------------------------------------------
+
+Welcome.jsp
+------------------
+<html>
+<body>
+<% String usr=request.getParameter("user");
+String pss=request.getParameter("pass");
+if((usr.equals("Admin"))&&(pss.equals("123")))
+{
+%>
+<%@include file="Valid.html" %>
+<%} 
+else
+{
+%>
+<%@include file="Invalid.html" %>
+<%} %>
+</body>
+</html>
+
+Valid.html
+---------------
+<html>
+<body bgcolor="green">
+<p>Valid Username and Password</p>
+</body>
+</html>
+
+Invalid.html
+-----------------
+<html>
+<body bgcolor="red">
+<p>Invalid Username and Password</p>
+</body>
+</html>
+
+
+------------------------Addition of two numbers----------------------------
+
+Addition.html file:
+--------------------------
+<html>
+<body bgcolor="pink">
+<form action="Addition1.jsp">
+Enter num1 : <input type="number" name="num1"/><br/>
+Enter num2 : <input type="number" name="num2"/><br/>
+<button type="submit">Click me</button>
+</form>
+
+</body>
+</html>
+
+
+Addition1.jsp file:
+--------------------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<html>
+<body>
+<%int num1=Integer.parseInt(request.getParameter("num1"));
+int num2=Integer.parseInt(request.getParameter("num2"));
+int result=num1+num2;
+out.println("sum is "+result);
+%>
+</body>
+</html>
+
+-------------------------------how to print a table(ex:1 to 100)-------------------
+
+index.html file:
+-------------------
+<html>
+<body bgcolor="pink">
+<form action="Welcome.jsp">
+Enter a number : <input type="text" name="num1"/><br/>
+<button type="submit">Click me</button>
+</form>
+</body>
+</html>
+
+jsp file:
+----------------
+<html>
+<body>
+<% 
+int n1=Integer.parseInt(request.getParameter("num1"));
+%>
+<table border="4">
+<tr><th>Number</th><th>Value</th><th>Result</th></tr>
+<%for(int i=1;i<=10;i++){ %>
+<tr><td><%=i %></td><td><%=n1 %></td><td><%=(i*n1) %></td></tr>
+<%} %>
+</table>
+</body>
+</html>
+
+
+----------------------------------------Response Implict object--------------------------
+It sends the response
+
+example program to find the url:
+
+html file:
+--------------------
+<html>
+<body bgcolor="pink">
+<form action="Welcome.jsp">
+Enter url : <input type="text" name="url"/><br/>
+<button type="submit">Click me</button>
+</form>
+</body>
+</html>
+
+jsp file:
+---------------------
+<html>
+<body>
+<% 
+String url=request.getParameter("url");
+response.sendRedirect(url);
+%>
+</body>
+</html>
+
+----------------------------------Action tags----------------------------------
+
+Student.java:
+-------------------------
+
+package com.example;
+public class Student {
+    private int rollno;
+    private String name;
+    private String branch;
+    public int getRollno() {
+    return rollno;
+	}
+	public void setRollno(int rollno) {
+	this.rollno = rollno;
+	}
+	public String getName() {
+        return name;
+	}
+        public void setName(String name) {
+        this.name = name;
+        }
+        public String getBranch() {
+        return branch;
+        }
+        public void setBranch(String branch) {
+        this.branch = branch;
+    }
+}
+
+one.html:
+--------------------
+<html>
+<body bgcolor="pink">
+<form action="Two.jsp">
+Enter Rollno : <input type="text" name="rollno"/><br/>
+Enter Name : <input type="text" name="name"/><br/>
+Enter Branch : <input type="text" name="branch"/><br/>
+<button type="submit">Click me</button>
+</form>
+</body>
+</html>
+
+two.jsp:
+-----------------------
+<html>
+<body bgcolor="cyan">
+<jsp:useBean id="s1" class="com.example.Student">
+<jsp:setProperty name="s1" property="*"/>
+</jsp:useBean>
+<p>Rollno <%=s1.getRollno() %></p>
+<p>Name <jsp:getProperty property="name" name="s1"/>
+<p>Branch <jsp:getProperty property="branch" name="s1"/>
+</body>
+</html>
+
+-----------------------------------------MVC----------------------------
+>>MVC:Model View Controller
+>>DAO:Data Access Object
+                      
+   springboot
+    view                  ------------SpringBoot-------         model(springboot,hibernate,EJB,JPA)
+                                      Controller
+                       ____________
+                      |            |       _______
+    jsp               |            |       |     |
+   servlet------------|   Jsp      |------ |Bean |---------------------------java,dao---------------------------------------------------DB
+                      |            |       |_____|
+                      |  servlet   |
+                      |____________|
+
+
+---------------------------------------RealTimeWebProject------------------------
+
+1.create dynamic web project-----take any project name
+2.in src/main/java- we have to create two packages(dao,bean)
+3.in the webapp---lib---- we have paste the mysql connector
+4.create class like StudentDao.java in the package com.example.dao
+5.in webapp we have to create Display .jsp(in that we have establish the connection to the database).
+
+StudentDao.java:
+---------------------
+package com.example.dao;
+import java.sql.*;
+
+public class StudentDao {
+	public static Connection con=getCon();
+	public static PreparedStatement ps;
+	public static ResultSet rs;
+	public static Connection getCon()
+	{
+		try
+		{
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			con=DriverManager.getConnection("jdbc:mysql://localhost:3306/mphasis","root","Password@12");
+			System.out.println("Connected Successfully..........");
+		}
+		catch(ClassNotFoundException cnf)
+		{
+			System.out.println(cnf);
+		}
+		catch(SQLException sql)
+		{
+			System.out.println(sql);
+		}
+		return con;
+		
+	}
+
+}
+
+insert values:
+-------------------------
+public static int addStudent(StudentBean sb)
+{
+	int i=0;
+	try
+	{
+		ps=con.prepareStatement("insert into student values(?,?,?)");
+		ps.setInt(1, sb.getRollno());
+		ps.setString(2, sb.getName());
+		ps.setString(3, sb.getBranch());
+		i=ps.executeUpdate();
+	}
+	catch(SQLException sql)
+	{
+		System.out.println(sql);
+		
+	}
+	return i;
+	
+}
+}
+
+for updation:
+-----------------------------
+public static int updateStudent(StudentBean sb)
+{
+	int i=0;
+	try
+	{
+		ps=con.prepareStatement("update student set name=?,branch=? where rollno=?");
+		ps.setInt(1, sb.getRollno());
+		ps.setString(2, sb.getName());
+		ps.setString(3, sb.getBranch());
+		i=ps.executeUpdate();
+	}
+	catch(SQLException sql)
+	{
+		System.out.println(sql);
+		
+	}
+	return i;
+	
+}
+}
+
+for deletion:
+------------
+public static int deleteStudent(int rno)
+{
+	int i=0;
+	try
+	{
+		ps=con.prepareStatement("delete from student where rollno=?");
+
+		ps.setInt(1,rno);
+		i=ps.executeUpdate();
+	}
+	catch(SQLException sql)
+	{
+		System.out.println(sql);
+		
+	}
+	return i;
+}
+}
+
+Selection of data from the table:(add import java.util.*)
+-------------------------------------------
+public static ArrayList<StudentBean> selectAll()
+{
+	ArrayList<StudentBean> al=new ArrayList<StudentBean>();
+	try
+	{
+		ps=con.prepareStatement("select * from student");
+		rs=ps.executeQuery();
+		while(rs.next())
+		{
+			StudentBean sb=new StudentBean();
+			sb.setRollno(rs.getInt("rollno"));
+			sb.setName(rs.getString(2));
+			sb.setBranch(rs.getString("branch"));
+			al.add(sb);
+		}
+	
+	}
+	catch(SQLException sql)
+	{
+		System.out.println(sql);
+	}
+	return al;
+}
+}
+
+select only one record from the table:
+------------------------------------------------
+public static StudentBean selectByRollno(int rno)
+{
+	StudentBean sb=new StudentBean();
+	try
+	{
+		ps=con.prepareStatement("select * from student where rollno=?");
+		ps.setInt(1, rno);
+		rs=ps.executeQuery();
+		while(rs.next()) {
+			sb.setRollno(rs.getInt(1));
+			sb.setName(rs.getString(2));
+			sb.setBranch(rs.getString(3));
+			
+		}
+	}
+	catch(SQLException sql)
+	{
+		System.out.println(sql);
+	}
+	return sb;
+		
+	}
+}
+
+
+display.jsp:
+--------------------
+<%@page import="com.example.dao.StudentDao"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<%=StudentDao.getCon() %>
+</body>
+</html>
+
+
+StudentBean.java:
+-------------------------
+package com.example.bean;
+public class StudentBean {
+	private int rollno;
+	private String name;
+	private String branch;
+	public int getRollno() {
+		return rollno;
+	}
+	public void setRollno(int rollno) {
+		this.rollno = rollno;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getBranch() {
+		return branch;
+	}
+	public void setBranch(String branch) {
+		this.branch = branch;
+	}
+	
+	
+
+}
+
+index.html:
+----------------------
+<!DOCTYPE html>
+<html>
+<body bgcolor="pink">
+	<form action="AddStudent.jsp">
+	 Enter rollno: <input type="text" name="rollno"/><br/>
+	 Enter name: <input type="text" name="name"/><br/>
+	 Enter Branch: <input type="text" name="branch"/><br/>
+	 <button type="submit">Add Student</button>
+	</form>
+
+for update values:
+---------------------------------------
+
+<h1>Update Student</h1>
+	<form action="UpdateStudent.jsp">
+	 Enter rollno: <input type="text" name="rollno"/><br/>
+	 Enter name: <input type="text" name="name"/><br/>
+	 Enter Branch: <input type="text" name="branch"/><br/>
+	 <button type="submit">Update Student</button>
+	</form>
+
+</body>
+</html>
+
+for delete values:
+--------------------------------------
+<hr/>
+	<h1>Delete Student</h1>
+	<form action="DeleteStudent.jsp">
+	 Enter rollno: <input type="text" name="rollno"/><br/>
+	 <button type="submit">Delete Student</button>
+	</form>
+    <hr/>
+
+for select all values:
+-------------------------------------
+<h1>Select All Student</h1>
+    <form action="SelectAll.jsp">
+		<button type="submit">Select All Student</button>
+    </form>
+
+for select only record:
+-----------------------------------
+<hr/>
+    <h1>Select Student By Rollno</h1>
+    <form action="SelectByRollno.jsp">
+		Enter rollno: <input="text" name="rollno"/><br/>
+		<button type="submit">Select Student By Rollno</button>
+
+
+
+AddStudent.jsp:
+---------------------
+<%@page import="com.example.dao.StudentDao" %>
+<html>
+<body bgcolor="cyan">
+<jsp:useBean id="s1" class="com.example.bean.StudentBean">
+<jsp:setProperty name="s1" property="*"/>
+</jsp:useBean>
+<%=StudentDao.addStudent(s1)+" record inserted successfully......." %>
+</body>
+</html>
+
+UpdateStudent.jsp:
+------------------------
+<%@page import="com.example.dao.StudentDao" %>
+<html>
+<body bgcolor="cyan">
+<jsp:useBean id="s1" class="com.example.bean.StudentBean">
+<jsp:setProperty name="s1" property="*"/>
+</jsp:useBean>
+<%=StudentDao.updateStudent(s1)+" record updated successfully......." %>
+</body>
+</html>
+
+DeleteStudent.jsp:
+--------------------------
+<%@page import="com.example.dao.StudentDao" %>
+<html>
+<body bgcolor="pink">
+<%int rollno=Integer.parseInt(request.getParameter("rollno"));
+out.println(StudentDao.deleteStudent(rollno)+" record deleted successfully..............");
+%>
+
+</body>
+</html>
+
+StudentAll.jsp:
+-----------------------------------
+<%@page import="com.example.dao.StudentDao" %>
+<%@page import="com.example.bean.StudentBean" %>
+<%@page import="java.util.ArrayList" %>
+<html>
+<body bgcolor="green">
+<%ArrayList<StudentBean> allStudent=StudentDao.selectAll();%>
+<table border="4">
+<tr><th>Rollno</th><th>Name</th><th>Branch</th></tr>
+<%for(StudentBean sb:allStudent){ %>
+<tr><td><%=sb.getRollno() %></td><td><%=sb.getName() %></td><td><%=sb.getBranch() %></td></tr>
+<%} %>
+</table>
+
+</body>
+</html>
+
+SelectAllByRollno.jsp:
+------------------------------------
+<%@page import="com.example.dao.StudentDao" %>
+<%@page import="com.example.bean.StudentBean" %>
+<html>
+<body bgcolor="yellow">
+<%
+int rno=Integer.parseInt(request.getParameter("rollno"));
+StudentBean sb=StudentDao.selectByRollno(rno);
+%>
+<table border="4">
+<tr><th>Rollno</th><th>Name</th><th>Branch</th></tr>
+<tr><td><%=sb.getRollno() %></td><td><%=sb.getName() %></td><td><%=sb.getBranch() %></td></tr>
+</table>
+
+
+</body>
+</html>
+	
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
