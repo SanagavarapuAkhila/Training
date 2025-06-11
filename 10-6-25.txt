@@ -1,0 +1,123 @@
+
+Hibernate:
+----------------
+session.save(emp);
+session.persistant(emp);
+session.
+
+creating a project:
+----------------------
+maven project-----------project name-----------create package,class,create xml files in src only-------------(cfg.xml,hbm.xml)
+----------------------
+cfg file will connect to the database.
+hbm file  will connect to all files in project.(hbm means hibernate mapping files)
+------------------------
+Sample Program:
+--------------------
+EmployeeBean.java:
+------------------------------
+package com.example;
+public class EmployeeBean {
+private int empid;
+private String empname;
+private int empsalary;
+public int getEmpid() {
+	return empid;
+}
+public void setEmpid(int empid) {
+	this.empid = empid;
+}
+public String getEmpname() {
+	return empname;
+}
+public void setEmpname(String empname) {
+	this.empname = empname;
+}
+public int getEmpsalary() {
+	return empsalary;
+}
+public void setEmpsalary(int empsalary) {
+	this.empsalary = empsalary;
+}
+ 
+}
+
+Main.java:
+---------------
+package com.example;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+public class Main {
+public static void main(String[] args) {
+Configuration cfg = new Configuration().configure();  
+SessionFactory sf=cfg.buildSessionFactory();//Initialize SessionFactory
+Session s=sf.openSession();//Intialize the Session
+Transaction t=s.beginTransaction();//Intialize the Transaction
+EmployeeBean eb=new EmployeeBean();
+eb.setEmpid(101);
+eb.setEmpname("Karthik");
+eb.setEmpsalary(45000);
+s.save(eb);
+System.out.println("Session Stored successfully....");
+t.commit();
+}
+}
+-------------------
+hibernate-demo/pom.xml:
+--------------------------------
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>
+  <artifactId>hibernate-demo</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>hibernate-demo</name>
+  <description>This is my first project</description>
+  <dependencies>
+	  <dependency>
+	  <groupId>com.mysql</groupId>
+	  <artifactId>mysql-connector-j</artifactId>
+	  <version>8.3.0</version>
+	  </dependency>
+	  <dependency>
+		 <groupId>org.hibernate.orm</groupId>
+	  <artifactId>hibernate-core</artifactId>
+	  <version>6.6.16.Final</version> 
+	  </dependency>
+  </dependencies>
+</project>
+-----------------------------
+employee.hbm.xml:
+------------------------
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+<hibernate-mapping>
+ <class name = "com.example.EmployeeBean" table = "emp555">
+ <id name = "empid" type = "int" column = "id">
+ <generator class="native"/>
+ </id>
+ <property name = "empname" column = "empname" type = "string"/>
+ <property name = "empsalary" column = "empsalary" type = "int"/>
+ </class>
+</hibernate-mapping>
+
+hibernate.cfg.xml:
+---------------------------
+<?xml version='1.0' encoding='UTF-8'?> 
+<!DOCTYPE hibernate-configuration PUBLIC 
+ "-//Hibernate/Hibernate Configuration DTD 5.3//EN" 
+ "http://hibernate.org/dtd/hibernate-configuration-3.0.dtd"> 
+<hibernate-configuration> 
+ <session-factory> 
+ <property name="hbm2ddl.auto">update</property> 
+ <property name="dialect">org.hibernate.dialect.MySQLDialect</property> 
+ <property name="connection.url">jdbc:mysql://localhost:3306/mphasis</property> 
+ <property name="connection.username">root</property> 
+ <property name="connection.password">Password@12</property> 
+ <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property> 
+ <mapping resource="employee.hbm.xml"/> 
+ </session-factory> 
+</hibernate-configuration>
