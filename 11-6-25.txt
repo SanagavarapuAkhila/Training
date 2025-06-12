@@ -1,0 +1,35 @@
+Hibernate:
+-----------------
+It's a ORM (object to relational mapping)frame work.
+hibernate.cfg.xml
+----------------
+@id
+@GeneratedValue
+employee.hbm.xml
+hql-hypertext query language
+---------------
+<id  />
+<generator class="native"/>
+-------------------
+POJO:
+------------
+plain old java object
+----------------
+Hibernate lifecycle:
+-----------------
+1.Transient State(not permenantly stored)
+2.Persistent State(we can use session method (session.save();session.update(),session.delete();))
+3.Detached State(session.close(); removing)
+4.Removed State(garbage)
+-------------------
+Links to prepare SQL:
+----------------------------------
+https://github.com/ieshreya/sql-50-leetcode?tab=readme-ov-file
+
+
+
+https://leetcode.com/discuss/post/1208129/list-of-free-leetcode-sql-questions-by-a-91fb/
+
+
+
+https://github.com/SadmanSakib93/LeetCode-MySql-Solutions
