@@ -1,0 +1,256 @@
+There are different types of autowiring:
+----------------------
+1.byName
+2.byType
+3.constructor
+4.no
+5.autodetect
+
+
+Connectors:
+-----------
+JdbcTemplate:
+SimplejdbcTemplate
+PreparedCallbackStatement
+RowMapper
+Map row
+--------------------
+SpringDB:(using preparedStatements)
+-----------
+beans.xml:
+----------------
+<beans xmlns = "http://www.springframework.org/schema/beans"
+xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation = "http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+<bean id="ds" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+<property name="driverClassName"  value="com.mysql.cj.jdbc.Driver"></property>
+<property name="url"  value="jdbc:mysql://localhost:3306/mphasis"></property>
+<property name="username" value="root"></property>
+<property name="password" value="Password@12"></property>
+</bean>
+<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+<property name="dataSource" ref="ds"></property>
+</bean>
+<bean id="edao" class="com.example.EmployeeDao">
+<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+</bean>
+<bean id="emp" class="com.example.EmployeeBean">
+</bean>
+</beans>
+
+
+EmployeeBean.java:
+--------------------
+package com.example;
+public class EmployeeBean {
+	private int empid;
+	private String empname;
+	private int empsalary;
+	
+	public int getEmpid() {
+		return empid;
+	}
+	public void setEmpid(int empid) {
+		this.empid = empid;
+	}
+	public String getEmpname() {
+		return empname;
+	}
+	public void setEmpname(String empname) {
+		this.empname = empname;
+	}
+	public int getEmpsalary() {
+		return empsalary;
+	}
+	public void setEmpsalary(int empsalary) {
+		this.empsalary = empsalary;
+	}
+	
+	
+	
+
+}
+
+EmployeeDao.java:
+---------------------
+package com.example;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCallback;
+import org.springframework.jdbc.core.RowMapper;
+public class EmployeeDao {
+private JdbcTemplate jdbcTemplate;
+int i=0;
+public JdbcTemplate getJdbcTemplate() {
+	return jdbcTemplate;
+
+}
+
+public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+	this.jdbcTemplate = jdbcTemplate;
+}
+
+public int addEmployee(EmployeeBean eb)
+{
+
+	return jdbcTemplate.update("insert into employee values('"+eb.getEmpid()+"','"+eb.getEmpname()+"','"+eb.getEmpsalary()+"')");
+}
+
+
+public int updateEmployee(EmployeeBean eb)
+{
+
+	jdbcTemplate.execute("update employee set name=?,salary=? where id=?",
+ new PreparedStatementCallback<EmployeeBean>() {
+
+
+
+ @Override
+ public EmployeeBean doInPreparedStatement(PreparedStatement ps)
+ throws SQLException, DataAccessException {
+ ps.setString(1,eb.getEmpname());
+ ps.setInt(2, eb.getEmpsalary());
+ ps.setInt(3, eb.getEmpid());
+ i=ps.executeUpdate();
+ return null;
+ }
+	});
+	return i;
+}
+
+public ArrayList<EmployeeBean> selectAll()
+{
+	ArrayList<EmployeeBean> al=new ArrayList<EmployeeBean>();
+jdbcTemplate.query("select * from employee", new RowMapper<EmployeeBean>() {
+	@Override
+	public EmployeeBean mapRow(ResultSet rs, int rownum) throws SQLException {
+ EmployeeBean eb=new EmployeeBean();
+ eb.setEmpid(rs.getInt(1));
+ eb.setEmpname(rs.getString(2));
+ eb.setEmpsalary(rs.getInt(3));
+ al.add(eb);
+ return null;
+	}
+
+});
+return al;
+}
+}
+
+-------------------------------
+Main.java:
+-------------------
+package com.example;
+import java.util.ArrayList;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+ 
+public class Main {
+	public static void main(String[] args) {
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
+		EmployeeBean emp =  (EmployeeBean)ctx.getBean("emp");
+		EmployeeDao edao = (EmployeeDao)ctx.getBean("edao");
+		//emp.setEmpid(101);
+		//emp.setEmpname("karthik");
+		//emp.setEmpsalary(56000);
+		//System.out.println(edao.addEmployee(emp)+" record inserted successfully");
+		//emp.setEmpid(101);
+		//emp.setEmpname("sahana");
+		//emp.setEmpsalary(59000);
+		//System.out.println(edao.updateEmployee(emp)+" record updated successfully");
+		ArrayList<EmployeeBean> all=edao.selectAll();
+
+		for(EmployeeBean eb:all)
+
+		{
+
+		System.out.println(eb.getEmpid()+" "+eb.getEmpname()+" "+eb.getEmpsalary());
+
+		}
+
+		}
+
+
+
+		
+}	
+ 
+
+
+SpringDB:(Using Annotation):
+-----------------------------------
+DBConfig.java:
+-----------------------
+package com.example;
+import org.springframework.context.annotation.Bean;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+public class DBConfig {
+@Bean
+public DriverManagerDataSource meth1()
+{
+DriverManagerDataSource ds=new DriverManagerDataSource();
+ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
+ds.setUrl("jdbc:mysql://localhost:3306/mphasis");
+ds.setUsername("root");
+ds.setPassword("root");
+return ds;
+}
+@Bean
+public JdbcTemplate meth2()
+{
+JdbcTemplate jdbcTemplate=new JdbcTemplate();
+jdbcTemplate.setDataSource(meth1());
+return jdbcTemplate;
+}
+@Bean
+public EmployeeDao meth3()
+{
+EmployeeDao edao=new EmployeeDao();
+edao.setJdbcTemplate(meth2());
+return edao;
+}
+@Bean(name="emp")
+public EmployeeBean meth4()
+{
+return new EmployeeBean();
+}
+}
+
+
+
+Main.java
+------------------
+package com.example;
+import java.util.ArrayList;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+public class Main {
+public static void main(String[] args) {
+//ApplicationContext ctx=new ClassPathXmlApplicationContext("beans.xml");
+//EmployeeBean emp=(EmployeeBean)ctx.getBean("emp");
+//EmployeeDao edao=(EmployeeDao)ctx.getBean("edao");
+//emp.setEmpid(101);
+//emp.setEmpname("Praveen");
+//emp.setEmpsalary(56000);
+//System.out.println(edao.addEmployee(emp)+" record inserted successfully....");
+//emp.setEmpid(101);
+//emp.setEmpname("Govind");
+//emp.setEmpsalary(88000);
+//System.out.println(edao.updateEmployee(emp)+" record updated successfully...");
+	ApplicationContext ctx=new AnnotationConfigApplicationContext(DBConfig.class);
+EmployeeBean eb=(EmployeeBean)ctx.getBean("emp");
+EmployeeDao edao=(EmployeeDao)ctx.getBean(EmployeeDao.class);
+ArrayList<EmployeeBean> all=edao.selectAll();
+for(EmployeeBean eb1:all)
+{
+System.out.println(eb1.getEmpid()+" "+eb1.getEmpname()+" "+eb1.getEmpsalary());
+}
+}
+}
