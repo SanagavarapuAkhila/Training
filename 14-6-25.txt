@@ -1,0 +1,290 @@
+Spring Stereo type Annotation:
+------------------------------------
+Special kind of annotation hich is understand by spring.
+------------------------
+@Controller
+@RestController
+@Service
+@Repository
+@Component
+
+SpringWeb:
+--------------------
+EmployeeBean.java:
+-------------------------------
+package com.example.bean;
+
+public class EmployeeBean {
+	private int id;
+	private String name;
+	private int salary;
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getSalary() {
+		return salary;
+	}
+	public void setSalary(int salary) {
+		this.salary = salary;
+	}
+	
+	
+	
+
+}
+
+
+AdminController.java:
+----------------------------
+package com.example.controller;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import com.example.bean.EmployeeBean;
+import com.example.dao.AdminDao;
+import com.example.service.AdminService;
+@Controller
+@RequestMapping("/admin")
+public class AdminController 
+{
+@Autowired
+private AdminService aserv;
+@RequestMapping("/second")
+public ModelAndView meth1()
+{
+return new ModelAndView("Welcome");
+}
+@RequestMapping("/login")
+public ModelAndView meth2(@RequestParam("user")String user,@RequestParam("pass")String pass)
+{
+if(user.equals("Admin")&&(pass.equals("123")))
+{
+return new ModelAndView("Valid");
+}
+else
+{
+return new ModelAndView("Invalid");
+}
+}
+@RequestMapping("/addEmp")
+public ModelAndView meth3(@ModelAttribute("eb")EmployeeBean eb)
+{
+System.out.println("Under controller "+eb);
+System.out.println(aserv.addEmployee(eb)+ " record inserted");
+return new ModelAndView("Added");
+}
+@RequestMapping("/selectAll")
+public ModelAndView meth4(Model m)
+{
+	m.addAttribute("aaa",aserv.selectAll());
+	return new ModelAndView("SelectAll");
+}
+}
+
+AdminDao.java:
+----------------------
+package com.example.dao;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCallback;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+import com.example.bean.EmployeeBean;
+
+
+
+@Repository
+public class AdminDao {
+int i=0;
+@Autowired
+private JdbcTemplate jdbcTemplate;
+public JdbcTemplate getJdbcTemplate() {
+return jdbcTemplate;
+}
+
+
+
+public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+this.jdbcTemplate = jdbcTemplate;
+}
+
+
+
+public int addEmployee(EmployeeBean eb)
+{
+
+System.out.println("Under dao "+eb);
+jdbcTemplate.execute("insert into employee values(?,?,?)",new PreparedStatementCallback<EmployeeBean>() {
+
+
+
+@Override
+public EmployeeBean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+ps.setInt(1, eb.getId());
+ps.setString(2, eb.getName());
+ps.setInt(3, eb.getSalary());
+i=ps.executeUpdate();
+return null;
+}
+});
+return i;
+}
+
+public ArrayList<EmployeeBean> selectAll()
+{
+ArrayList<EmployeeBean> al=new ArrayList<EmployeeBean>();
+jdbcTemplate.query("select * from employee",new RowMapper<EmployeeBean>() {
+@Override
+public EmployeeBean mapRow(ResultSet rs, int rownum) throws SQLException {
+EmployeeBean e1=new EmployeeBean();
+e1.setId(rs.getInt(1));
+e1.setName(rs.getString(2));
+e1.setSalary(rs.getInt(3));
+al.add(e1);
+return null;
+}
+});
+return al;
+}
+}
+
+Added.jsp:
+-------------------
+<html>
+<body bgcolor="yellow">
+<h1>Record added successfully...</h1>
+</body>
+</html>
+ 
+Invalid.jsp:
+---------------
+<html>
+<body bgcolor="skyblue">
+<h1>Invalid username and password</h1>
+
+</body>
+</html>
+
+SelectAll():
+------------------
+<%@page import="com.example.bean.EmployeeBean" %>
+<%@page import="java.util.ArrayList" %>
+<html>
+<body bgcolor="cyan">
+<%ArrayList<EmployeeBean> all=(ArrayList<EmployeeBean>)request.getAttribute("aaa");
+%>
+<table border ="4">
+<tr><th>Emp ID</th><th>Emp Name</th><th>Emp Salary</th></tr>
+<%for(EmployeeBean eb:all) {%>
+<tr><td><%=eb.getId() %></td><td><%=eb.getName() %></td><td><%=eb.getSalary() %></td></tr>
+<%} %>
+</table>
+
+</body>
+</html>
+
+Valid.jsp:
+------------------
+<html>
+<body bgcolor="orange">
+<h1>Add Employee</h1>
+<form action="./addEmp">
+Enter Employee ID: <input type="text" name="id" /><br/>
+Enter Employee Name: <input type="text" name="name" /><br/>
+Enter Employee Salary: <input type="text" name="salary" /><br/>
+<button type="submit">submit</button>
+<h1>Valid username and password</h1>
+</form>
+</body>
+</html>
+
+Welcome.jsp:
+-------------------
+<html>
+<body bgcolor="cyan">
+<p>Welcome to Mphasis</p>
+<form action="./login">
+Enter username : <input type="text" name="user"/>
+Enter password: <input type="password" name="pass">
+<button type="submit">Login</button>
+</form>
+</body>
+</html>
+
+mphasis-servlet.xml:
+-----------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:context="http://www.springframework.org/schema/context"
+ xmlns:mvc="http://www.springframework.org/schema/mvc"
+ xsi:schemaLocation="
+ http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans.xsd
+ http://www.springframework.org/schema/context
+ http://www.springframework.org/schema/context/spring-context.xsd
+ http://www.springframework.org/schema/mvc
+ http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+ <context:component-scan base-package="com.example"/>
+ <mvc:annotation-driven/>
+ <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+ <property name="prefix" value="/WEB-INF/views/"/>
+ <property name="suffix" value=".jsp"/>
+ </bean> 
+<bean id="ds" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+ <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>
+ <property name="url" value="jdbc:mysql://localhost:3306/mphasis"></property>
+ <property name="username" value="root"></property>
+ <property name="password" value="Password@12"></property>
+ </bean>
+ <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+ <property name="dataSource" ref="ds"></property>
+ </bean>
+ <bean id="adao" class="com.example.dao.AdminDao">
+ <property name="jdbcTemplate" ref="jdbcTemplate"></property>
+ </bean>
+ <bean id="emp" class="com.example.bean.EmployeeBean"></bean>
+</beans>
+
+web.xml:
+-----------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+ <servlet>
+ <servlet-name>mphasis</servlet-name>
+ <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+ <load-on-startup>1</load-on-startup>
+</servlet>
+<servlet-mapping>
+ <servlet-name>mphasis</servlet-name>
+ <url-pattern>/</url-pattern>
+</servlet-mapping>
+</web-app>
+
+index.jsp:
+----------------
+<html>
+<body bgcolor="pink">
+<a href="./admin/second">Click me</a>
+</body>
+</html>
