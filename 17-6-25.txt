@@ -1,0 +1,216 @@
+javascript:
+----------------------
+>> it's a typeless programming language.
+>> we can make the page as dynamic.
+>> interpreted programming language
+-----------------------
+Two types:
+
+DOM:Document object model
+BOM:browser object model
+--------------------
+cmd-  code .
+liveserver port no:5500
+----------------------
+types:
+------
+>> inline java script- directly defined the script
+-----------------------------
+<html>
+    
+    <body bgcolor="pink">
+        <p>Welcome to Mphasis</p>
+      <button onclick="alert('Welcome to JavaScript')">Click Me</button>
+    </body>
+</html> 
+------------------------
+>> internal java script- we have to declare script writing in the body
+--------------------------
+<html>
+    <script>
+        function func()
+        {
+            alert("Welcome ti JavaScript")
+        }
+    </script>
+    <body bgcolor="blue">
+      <p>Welcome to Mphasis</p>
+      <button onclick="func()">Click Me</button>
+    </body>
+</html>
+>> external java script-in src we have to give (we have to create another file with myscript.js)
+---------------------
+<html>
+  <script src="./myscript.js"></script>  
+    <body bgcolor="pink">
+
+      <button onclick="func()">Click Me</button>
+    </body>
+</html>
+---------------------
+connect with js:
+------------------------
+function func()
+{
+    alert('External javaScript')
+}
+--------------------------------------------
+Functions:
+---------
+onmouseover()
+onmouseout()
+onmouseclick()
+onmouseclean()
+onmousekeyup()
+onmousekeydown()
+-----------------------
+addeventListener:
+--------------------
+element.addEventListener(event, function, useCapture);
+>> event: The name of the event (e.g., "click", "keydown", "mouseover").
+>> function: The callback function to execute when the event occurs.
+>> useCapture (optional): A boolean indicating whether the event should be captured during the capturing phase (true) or the bubbling phase (false). Defaults to false.
+
+ex:
+-----------
+<button id="bt1">Click Me</button>
+      <script>
+           document.getElementById("bt1").addEventListener('mouseover',()=>{
+           var c=document.getElementById("bt1").style
+            c.backgroundColor='orange'
+            c.color='green'      
+           })
+      </script>
+
+------------------------------------------------------
+innerHTML: it will allows us to see the output through the browser
+innerText: it will shows only text in the browser
+
+ex:
+----------
+<html>
+    <body bgcolor="pink">
+        Enter name : <input type="text" id="user"/>
+        <p id="abc"></p>
+        <script>
+            document.getElementById("user").addEventListener('keyup',()=> {
+                var usr=document.getElementById("user").value;
+                document.getElementById("abc").innerHTML="<font color='red' size='22'>"+usr+"</font>"
+            })
+        </script>
+   
+    </body>
+</html>
+---------------------------------------------
+To display the text :(if we want to do with the class name add the class infront of (ElementsByClassName))
+-----------------------
+<html>
+   <script>
+function func()
+{
+    var x= document.getElementsByName("user")[0].value;
+    document.getElementById("abc").innerHTML=x
+}
+</script>
+    <body bgcolor="pink">
+     Enter name : <input type ="text" name = "user"/>
+     <button onclick="func()">Click me</button>
+     <p id="abc"></p>
+    </body>
+</html>
+--------------------------
+converting into the integer:
+------------------
+<html>
+   <script>
+function func()
+{
+    var x= parseInt(document.getElementsByName("user")[0].value);
+    for(i=1;i<=x;i++)
+    {
+    document.getElementById("abc").innerHTML+=i+"</br>"
+    }
+}
+</script>
+    <body bgcolor="pink">
+     Enter name : <input type ="text" name = "user"/>
+     <button onclick="func()">Click me</button>
+     <p id="abc"></p>
+    </body>
+</html>
+---------------------
+even number program on js:
+-------------
+<html>
+   <script>
+function func()
+{
+    var x= parseInt(document.getElementsByName("user")[0].value);
+    for(i=1;i<=x;i++)
+    {
+       if(i%2==0)
+       {
+          document.getElementById("abc").innerHTML+=i+"</br>"
+       }
+    }
+}
+</script>
+    <body bgcolor="pink">
+     Enter name : <input type ="text" name = "user"/>
+     <button onclick="func()">Click me</button>
+     <p id="abc"></p>
+    </body>
+</html>
+---------------------------
+Program on validation for user & password using js:
+-------------
+<html>
+   <script>
+function func()
+{
+    var usr=document.getElementById("user").value;
+    var pss=document.getElementById("pass").value;
+    if((usr=='Admin')&&(pss=='123'))
+    {
+       document.getElementById("abc").innerHTML="<font color='green' size='22'>Valid User</font>"
+    
+    }
+    else
+    {
+       document.getElementById("abc");
+}
+</script>
+    <body bgcolor="pink">
+     Enter name : <input type ="text" name = "user"/>
+     <button onclick="func()">Click me</button>
+     <p id="abc"></p>
+    </body>
+</html>
+--------------------
+valid user & invalid user:
+---------------
+<html>
+   <script>
+function func()
+{
+    var usr=document.getElementById("user").value;
+    var pss=document.getElementById("pass").value;
+    if((usr=='Admin')&&(pss=='123'))
+    {
+       document.getElementById("abc").innerHTML="<font color='green' size='22'>Valid User</font>"
+    
+    }
+    else
+    {
+       data=document.getElementById("abc");
+       data.style.backgroundColor='red'
+       data.innerHTML='Invalid User'
+    }
+}
+</script>
+    <body bgcolor="pink">
+     Enter name : <input type ="text" name = "user"/>
+     <button onclick="func()">Click me</button>
+     <p id="abc"></p>
+    </body>
+</html>
