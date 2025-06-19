@@ -1,0 +1,131 @@
+pom.xml:
+-------------------------
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>
+  <artifactId>MavenDemo</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>MavenDemo</name>
+  <description>This is the maven spring</description>
+  <parent>
+  		<groupId>org.springframework.boot</groupId>
+  		<artifactId>spring-boot-starter-parent</artifactId>
+  		<version>3.5.0</version>
+  		<relativepath/>
+  </parent>
+<dependencies>
+  <dependency>
+  	<groupId>org.springframework.boot</groupId>
+  	<artifactId>spring-boot-starter</artifactId>
+  	<version>3.5.0</version>
+  </dependency>
+  <dependency>
+  	<groupId>org.springframework.boot</groupId>
+  	<artifactId>spring-boot-starter-data-jpa</artifactId>
+  </dependency>
+  <dependency>
+  	<groupId>com.mysql</groupId>
+  	<artifactId>mysql-connector-j</artifactId>
+  	<scope>runtime</scope>
+  </dependency>
+</dependencies>
+</project>
+
+--------------------------------------------
+MavenApp.java:
+----------------------
+package com.example;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.annotation.Order;
+@SpringBootApplication
+@Order(value=2)  //it automatically get loads by using order value, we call it as pre configuration, first it will print Application runner as we have given value as 1 and prints commandline runner
+public class MavenApp implements CommandLineRunner {
+	public static void main(String[] args) {
+		ConfigurableApplicationContext ctx = SpringApplication.run(MavenApp.class, args);
+		//StudentBean sb = (StudentBean)ctx.getBean(StudentBean.class);
+		StudentBean sb = (StudentBean)ctx.getBean("sb1");
+		sb.setRollno(101);
+		sb.setName("Vijay");
+		sb.setBranch("CSE");
+		System.out.println(sb.getRollno()+" "+sb.getName()+" "+sb.getBranch());
+	}	
+	
+	
+	
+	@Override
+	public void run(String... args) throws Exception {
+		for(String n : args) {
+			System.out.println(n);
+		}
+		System.out.println("Command line Runner");
+	}
+}
+-------------------------------- 
+MyBean.java:
+--------------------
+package com.example;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+@Component
+@Order(value=1)
+public class MyBean implements ApplicationRunner{
+	@Override
+	public void run(ApplicationArguments args) throws Exception {
+		System.out.println("Application Runner");
+	}
+}
+--------------------------------------
+StudentBean.java:
+-----------------------
+package com.example;
+import org.springframework.stereotype.Component;
+import jakarta.persistence.*;
+@Component(value="sb1")
+@Entity
+@Table(name="student111")
+public class StudentBean {
+	@Id
+	@GeneratedValue
+	private int rollno;
+	@Column
+	private String name;
+	@Column
+	private String branch;
+	public int getRollno() {
+		return rollno;
+	}
+	public void setRollno(int rollno) {
+		this.rollno = rollno;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getBranch() {
+		return branch;
+	}
+	public void setBranch(String branch) {
+		this.branch = branch;
+	}
+}
+-----------------------------------------------
+application.properties:
+--------------------------------
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url = jdbc:mysql://localhost:3306/mphasis
+spring.datasource.username = root
+spring.datasource.password = Password@12
+spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL8Dialect
+spring.jpa.hibernate.ddl-auto = update
+----------------------------------------------
+ 
+ 
+ 
+ 
